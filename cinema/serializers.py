@@ -62,8 +62,8 @@ class MovieSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        actors_data = validated_data.pop('actors')
-        genres_data = validated_data.pop('genres')
+        actors_data = validated_data.pop("actors")
+        genres_data = validated_data.pop("genres")
 
         movie = Movie.objects.create(**validated_data)
         movie.actors.set(actors_data)
@@ -72,8 +72,8 @@ class MovieSerializer(serializers.Serializer):
         return movie
 
     def update(self, instance, validated_data):
-        actors_data = validated_data.pop('actors', None)
-        genres_data = validated_data.pop('genres', None)
+        actors_data = validated_data.pop("actors", None)
+        genres_data = validated_data.pop("genres", None)
 
         instance.title = validated_data.get("title", instance.title)
         instance.description = validated_data.get("description", instance.description)
@@ -89,12 +89,12 @@ class MovieSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['actors'] = [
-            {'id': actor.id, 'first_name': actor.first_name, 'last_name': actor.last_name}
+        representation["actors"] = [
+            {"id": actor.id, "first_name": actor.first_name, "last_name": actor.last_name}
             for actor in instance.actors.all()
         ]
-        representation['genres'] = [
-            {'id': genre.id, 'name': genre.name}
+        representation["genres"] = [
+            {"id": genre.id, "name": genre.name}
             for genre in instance.genres.all()
         ]
         return representation

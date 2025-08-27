@@ -2,7 +2,6 @@ from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework import routers
 
 from cinema.models import Movie, Genre, Actor, CinemaHall
@@ -166,6 +165,5 @@ class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-# Router for MovieViewSet
 router = routers.DefaultRouter()
-router.register(r'movies', MovieViewSet)
+router.register(r"movies", MovieViewSet)
