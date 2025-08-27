@@ -58,12 +58,12 @@ class MovieSerializer(serializers.Serializer):
     actors = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
-        required=False  # Make it optional
+        required=False
     )
     genres = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
-        required=False  # Make it optional
+        required=False
     )
 
     def create(self, validated_data):
@@ -83,7 +83,8 @@ class MovieSerializer(serializers.Serializer):
         instance.title = validated_data.get("title", instance.title)
         instance.description = validated_data.get("description",
                                                   instance.description)
-        instance.duration = validated_data.get("duration", instance.duration)
+        instance.duration = validated_data.get("duration",
+                                               instance.duration)
         instance.save()
 
         if actors_data is not None:
@@ -95,13 +96,6 @@ class MovieSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["actors"] = [
-            {"id": actor.id, "first_name": actor.first_name,
-             "last_name": actor.last_name}
-            for actor in instance.actors.all()
-        ]
-        representation["genres"] = [
-            {"id": genre.id, "name": genre.name}
-            for genre in instance.genres.all()
-        ]
+        representation["actors"] = [actor.id for actor in instance.actors.all()]
+        representation["genres"] = [genre.id for genre in instance.genres.all()]
         return representation
