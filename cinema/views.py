@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import routers
+from rest_framework import generics, mixins
 
 from cinema.models import Movie, Genre, Actor, CinemaHall
 from cinema.serializers import (
@@ -69,32 +70,12 @@ class GenreDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ActorList(generics.GenericAPIView):
-    queryset = Actor.objects.all()
-    serializer_class = ActorSerializer
-
-    def get(self, request):
-        actors = self.get_queryset()
-        serializer = self.get_serializer(actors, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-from rest_framework import generics, mixins
-
-# ... other imports ...
-
 class ActorList(mixins.ListModelMixin,
                 mixins.CreateModelMixin,
                 generics.GenericAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
+
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
