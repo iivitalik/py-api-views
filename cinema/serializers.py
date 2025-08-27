@@ -58,17 +58,17 @@ class MovieSerializer(serializers.Serializer):
     actors = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
-        required=False
+        required=False  # Make it optional
     )
     genres = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True,
-        required=False
+        required=False  # Make it optional
     )
 
     def create(self, validated_data):
-        actors_data = validated_data.pop("actors")
-        genres_data = validated_data.pop("genres")
+        actors_data = validated_data.pop("actors", [])  # Use empty list if not provided
+        genres_data = validated_data.pop("genres", [])  # Use empty list if not provided
 
         movie = Movie.objects.create(**validated_data)
         movie.actors.set(actors_data)
@@ -81,8 +81,7 @@ class MovieSerializer(serializers.Serializer):
         genres_data = validated_data.pop("genres", None)
 
         instance.title = validated_data.get("title", instance.title)
-        instance.description = validated_data.get("description",
-                                                  instance.description)
+        instance.description = validated_data.get("description", instance.description)
         instance.duration = validated_data.get("duration", instance.duration)
         instance.save()
 
@@ -92,6 +91,18 @@ class MovieSerializer(serializers.Serializer):
             instance.genres.set(genres_data)
 
         return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["actors"] = [
+            {"id": actor.id, "first_name": actor.first_name, "last_name": actor.last_name}
+            for actor in instance.actors.all()
+        ]
+        representation["genres"] = [
+            {"id": genre.id, "name": genre.name}
+            for genre in instance.genres.all()
+        ]
+        return representation
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
