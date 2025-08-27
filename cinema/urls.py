@@ -12,7 +12,8 @@ app_name = "cinema"
 
 urlpatterns = [
     path("genres/", GenreAPIView.as_view(), name="genre-list"),
-    path("genres/<int:pk>/", GenreDetailAPIView.as_view(), name="genre-detail"),
+    path("genres/<int:pk>/", GenreDetailAPIView.as_view(),
+         name="genre-detail"),
     path("actors/", ActorListCreateView.as_view(), name="actor-list"),
     path("actors/<int:pk>/", ActorDetailView.as_view(), name="actor-detail"),
     path("cinema_halls/", CinemaHallViewSet.as_view(
