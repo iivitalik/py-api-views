@@ -105,16 +105,3 @@ class MovieSerializer(serializers.Serializer):
             for genre in instance.genres.all()
         ]
         return representation
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["actors"] = [
-            {"id": actor.id, "first_name": actor.first_name,
-             "last_name": actor.last_name}
-            for actor in instance.actors.all()
-        ]
-        representation["genres"] = [
-            {"id": genre.id, "name": genre.name}
-            for genre in instance.genres.all()
-        ]
-        return representation

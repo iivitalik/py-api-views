@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import routers
-from rest_framework import generics, mixins
+from rest_framework import mixins
 
 from cinema.models import Movie, Genre, Actor, CinemaHall
 from cinema.serializers import (
@@ -75,7 +75,6 @@ class ActorList(mixins.ListModelMixin,
                 generics.GenericAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
