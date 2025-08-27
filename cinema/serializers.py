@@ -57,11 +57,13 @@ class MovieSerializer(serializers.Serializer):
     duration = serializers.IntegerField()
     actors = serializers.ListField(
         child=serializers.IntegerField(),
-        write_only=True
+        write_only=True,
+        required=False
     )
     genres = serializers.ListField(
         child=serializers.IntegerField(),
-        write_only=True
+        write_only=True,
+        required=False
     )
 
     def create(self, validated_data):

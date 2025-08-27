@@ -13,7 +13,7 @@ from cinema.serializers import (
 )
 
 
-class GenreAPIView(APIView):
+class GenreList(APIView):
     def get(self, request):
         genres = Genre.objects.all()
         serializer = GenreSerializer(genres, many=True)
@@ -27,7 +27,7 @@ class GenreAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GenreDetailAPIView(APIView):
+class GenreDetail(APIView):
     def get_object(self, pk):
         try:
             return Genre.objects.get(pk=pk)
@@ -69,7 +69,7 @@ class GenreDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ActorListCreateView(generics.GenericAPIView):
+class ActorList(generics.GenericAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
@@ -86,7 +86,7 @@ class ActorListCreateView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ActorDetailView(generics.GenericAPIView):
+class ActorDetail(generics.GenericAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
@@ -105,8 +105,7 @@ class ActorDetailView(generics.GenericAPIView):
 
     def patch(self, request, pk):
         actor = self.get_object()
-        serializer = self.get_serializer(actor, data=request.data,
-                                         partial=True)
+        serializer = self.get_serializer(actor, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
